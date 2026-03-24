@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Self-Healing Agents: How Droid Closes Its Own Feedback Loop</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css" id="theme" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/monokai.css" />
+
+<style>
+  /* ── Factory fonts ── */
+  @font-face {
+    font-family: 'Geist';
+    src: url('fonts/geist/Geist-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Geist';
+    src: url('fonts/geist/Geist-Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Geist';
+    src: url('fonts/geist/Geist-SemiBold.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Geist';
+    src: url('fonts/geist/Geist-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Geist';
+    src: url('fonts/geist/Geist-ExtraBold.woff2') format('woff2');
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Berkeley Mono';
+    src: url('fonts/berkeley-mono/BerkeleyMono-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Berkeley Mono';
+    src: url('fonts/berkeley-mono/BerkeleyMono-Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Berkeley Mono';
+    src: url('fonts/berkeley-mono/BerkeleyMono-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  :root {
+    --mica-1: #BC4B00;
+    --mica-2: #ED4823;
+    --mica-3: #EE6018;
+    --mica-4: #D56A26;
+    --mica-5: #F27B2F;
+    --mica-6: #FFA469;
+    --mica-7: #EBB28C;
+
+    --tungsten-1: #F2F0F0;
+    --tungsten-2: #E4E2E1;
+    --tungsten-3: #D8D4D2;
+    --tungsten-5: #BFB7B3;
+    --tungsten-6: #B3A9A4;
+    --tungsten-7: #A89895;
+    --tungsten-8: #9B8E87;
+    --tungsten-11: #736864;
+    --tungsten-13: #59514D;
+    --tungsten-14: #4C4542;
+    --tungsten-15: #403A37;
+    --tungsten-16: #342F2D;
+    --tungsten-17: #282523;
+    --tungsten-18: #1D1B1A;
+    --tungsten-19: #161413;
+    --tungsten-20: #000000;
+
+    --ruby-2: #D9363E;
+    --ruby-3: #E54048;
+    --jade-2: #5B8E63;
+    --jade-3: #6FAB78;
+    --topaz-2: #E3992A;
+    --topaz-3: #F0A330;
+    --azurite-2: #378BC8;
+    --azurite-3: #50ACF2;
+
+    --r-background-color: var(--tungsten-19);
+    --r-main-color: var(--tungsten-1);
+    --r-heading-color: var(--tungsten-1);
+    --r-link-color: var(--mica-5);
+    --r-link-color-hover: var(--mica-6);
+    --r-selection-background-color: var(--mica-4);
+    --r-heading-font: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --r-main-font: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --r-code-font: 'Berkeley Mono', 'SF Mono', Monaco, Inconsolata, 'Roboto Mono', Consolas, monospace;
+  }
+
+  /* ── Reticule grid background ── */
+  .reveal .slide-background-content {
+    background-image:
+      linear-gradient(rgba(89, 81, 77, 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(89, 81, 77, 0.08) 1px, transparent 1px),
+      linear-gradient(rgba(89, 81, 77, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(89, 81, 77, 0.04) 1px, transparent 1px);
+    background-size:
+      100px 100px,
+      100px 100px,
+      20px 20px,
+      20px 20px;
+    background-position: center center;
+  }
+
+  /* Crosshair marks at corners */
+  .reveal .slides section::before {
+    content: '';
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    width: 24px;
+    height: 24px;
+    border-top: 1px solid var(--tungsten-16);
+    border-left: 1px solid var(--tungsten-16);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .reveal .slides section::after {
+    content: '';
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    width: 24px;
+    height: 24px;
+    border-bottom: 1px solid var(--tungsten-16);
+    border-right: 1px solid var(--tungsten-16);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Radial vignette */
+  .reveal .slide-background-content::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 40%, var(--tungsten-19) 100%);
+    pointer-events: none;
+  }
+
+  .reveal { font-size: 32px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  .reveal h1 { font-size: 2.2em; font-weight: 800; letter-spacing: -0.03em; color: var(--tungsten-1); text-transform: none; }
+  .reveal h2 { font-size: 1.45em; font-weight: 700; letter-spacing: -0.02em; color: var(--mica-4); margin-bottom: 0.4em; text-transform: none; }
+  .reveal h3 { font-size: 0.75em; font-weight: 500; color: var(--tungsten-7); margin-top: -0.3em; margin-bottom: 0.6em; letter-spacing: -0.01em; text-transform: none; }
+  .reveal p, .reveal li { font-size: 0.75em; line-height: 1.6; color: var(--tungsten-2); letter-spacing: -0.13px; }
+  .reveal strong { color: var(--tungsten-1); }
+  .reveal ul { list-style: "›  "; padding-left: 1.4em; text-align: left; }
+  .reveal ul li { padding-left: 0.2em; text-indent: 0; }
+  .reveal ul li::marker { color: var(--mica-4); font-weight: 600; }
+  .reveal ul ul { list-style: "·  "; padding-left: 1.4em; }
+  .reveal ul ul li::marker { color: var(--tungsten-8); }
+  .reveal code {
+    font-family: var(--r-code-font);
+    font-size: 0.85em;
+    background: var(--tungsten-17);
+    padding: 0.1em 0.35em;
+    border-radius: 4px;
+    color: var(--mica-6);
+  }
+  .reveal pre { width: 100%; box-shadow: none; margin: 0.4em 0; }
+  .reveal pre code {
+    font-size: 0.6em;
+    line-height: 1.5;
+    padding: 1em 1.2em;
+    border-radius: 8px;
+    background: var(--tungsten-18);
+    border: 1px solid var(--tungsten-16);
+    max-height: 450px;
+  }
+
+  .reveal .slides section {
+    text-align: left;
+    padding: 40px 0 0;
+    display: flex !important;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100%;
+  }
+  .reveal .slides section > * {
+    width: 100%;
+    max-width: 900px;
+  }
+  .reveal .slides section.center-slide {
+    text-align: center;
+    justify-content: center;
+    padding-top: 0;
+  }
+
+  .slide-number { font-family: var(--r-code-font) !important; font-size: 12px !important; color: var(--tungsten-11) !important; }
+
+  .flow-pipeline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35em;
+    align-items: center;
+    margin: 0.6em 0;
+  }
+  .flow-step {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    background: var(--tungsten-17);
+    border: 1px solid var(--tungsten-15);
+    border-radius: 6px;
+    padding: 0.35em 0.7em;
+    font-size: 0.6em;
+    color: var(--tungsten-2);
+    white-space: nowrap;
+  }
+  .flow-step .step-icon { font-size: 1.1em; }
+  .flow-step.active {
+    border-color: var(--mica-4);
+    background: rgba(213, 106, 38, 0.1);
+    color: var(--mica-6);
+  }
+  .flow-step.done {
+    border-color: var(--jade-2);
+    background: rgba(91, 142, 99, 0.1);
+    color: var(--jade-3);
+  }
+  .flow-arrow {
+    color: var(--tungsten-13);
+    font-size: 0.7em;
+    margin: 0 0.1em;
+  }
+
+  .arch-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin: 0.3em 0;
+    font-size: 0.6em;
+  }
+  .arch-source {
+    min-width: 140px;
+    text-align: left;
+    padding-right: 0.8em;
+    color: var(--tungsten-6);
+    font-family: var(--r-code-font);
+  }
+  .arch-arrow {
+    color: var(--tungsten-13);
+    padding: 0 0.3em;
+  }
+  .arch-skill {
+    background: rgba(213, 106, 38, 0.12);
+    border: 1px solid var(--mica-4);
+    border-radius: 6px;
+    padding: 0.3em 0.7em;
+    color: var(--mica-5);
+    font-family: var(--r-code-font);
+    white-space: nowrap;
+  }
+  .arch-output {
+    background: rgba(91, 142, 99, 0.1);
+    border: 1px solid #4A7450;
+    border-radius: 6px;
+    padding: 0.3em 0.7em;
+    color: var(--jade-3);
+    font-family: var(--r-code-font);
+    white-space: nowrap;
+  }
+
+  .takeaway {
+    background: var(--tungsten-18);
+    border-left: 3px solid var(--mica-4);
+    border-radius: 0 8px 8px 0;
+    padding: 0.6em 1em;
+    margin-top: 1em;
+    font-size: 0.65em;
+    color: var(--tungsten-3);
+  }
+  .takeaway strong { color: var(--mica-5); }
+
+  .tag {
+    display: inline-block;
+    background: var(--tungsten-17);
+    border: 1px solid var(--tungsten-15);
+    color: var(--mica-5);
+    padding: 0.15em 0.55em;
+    border-radius: 4px;
+    font-size: 0.6em;
+    font-family: var(--r-code-font);
+    margin: 0.1em;
+  }
+  .tag.green { color: var(--jade-3); border-color: var(--jade-2); }
+  .tag.blue { color: var(--azurite-3); border-color: var(--azurite-2); }
+  .tag.red { color: var(--ruby-3); border-color: var(--ruby-2); }
+  .tag.yellow { color: var(--topaz-3); border-color: var(--topaz-2); }
+
+  .demo-video {
+    width: 100%;
+    max-width: 900px;
+    margin: 0.5em auto 2em;
+    border-radius: 8px;
+    border: 1px solid var(--tungsten-16);
+    background: var(--tungsten-20);
+  }
+
+  .number-list { counter-reset: item; list-style: none !important; padding-left: 0; text-align: left; }
+  .number-list li { counter-increment: item; padding-left: 2.2em; text-indent: -2.2em; margin-bottom: 0.3em; }
+  .number-list li::before {
+    content: counter(item);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.4em;
+    height: 1.4em;
+    background: var(--mica-4);
+    color: var(--tungsten-19);
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 0.7em;
+    margin-right: 0.5em;
+    vertical-align: middle;
+  }
+  .number-list li .sub { display: block; font-size: 0.85em; color: var(--tungsten-7); padding-left: 2.2em; margin-top: 0.1em; }
+
+  .controls { color: var(--mica-4) !important; }
+  .progress span { background: var(--mica-4) !important; }
+
+  .accent-line {
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--mica-4), var(--mica-6));
+    border-radius: 2px;
+    margin: 0.8em auto;
+  }
+
+  .stats-row {
+    display: flex;
+    justify-content: center;
+    gap: 2em;
+    margin-top: 1em;
+  }
+  .stat { text-align: center; }
+  .stat .num {
+    font-size: 1.4em;
+    font-weight: 800;
+    color: var(--mica-5);
+    font-family: var(--r-code-font);
+  }
+  .stat .label {
+    font-size: 0.5em;
+    color: var(--tungsten-8);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- Slide 1: Opening image -->
+<section class="center-slide" data-background-image="images/opening-bg.jpg" data-background-size="contain" data-background-color="#161413">
+</section>
+
+<!-- Slide 2: Droid intro -->
+<section>
+  <h2>At Factory, we make Droid</h2>
+  <p class="fragment">A coding agent that lives inside your terminal.</p>
+  <img class="fragment" src="images/droid-tui.png" alt="Droid TUI" style="width:100%; max-width:800px; margin:0.5em auto; border-radius:8px; border:1px solid var(--tungsten-16);">
+</section>
+
+<!-- Slide 3: Reliability -->
+<section class="center-slide" data-background-color="#161413">
+  <p style="font-size:0.85em; color:var(--tungsten-2); line-height:1.8;">
+    <span class="fragment">Software will never be perfect,</span><br>
+    <span class="fragment">but we all strive to make it as <strong style="color:var(--mica-5);">reliable</strong> as possible,</span><br>
+    <span class="fragment">while also being able to <strong style="color:var(--jade-3);">move fast</strong>.</span>
+  </p>
+</section>
+
+<!-- Slide 4: How can we iterate faster -->
+<section class="center-slide" data-background-color="#161413">
+  <h1 style="font-size:1.6em; margin-bottom:0;">How can we iterate faster these days?</h1>
+</section>
+
+<!-- Slide 5: Title -->
+<section class="center-slide" data-background-color="#161413">
+  <h1 style="font-size:1.7em; margin-bottom:0;">Self-healing agents</h1>
+  <div class="accent-line"></div>
+  <p style="font-size:0.85em; color:var(--mica-4); margin:0.3em 0 0.8em;">How Droid closes its own feedback loop</p>
+  <p style="font-size:0.55em; color:var(--tungsten-7);">David Gu — Member of Technical Staff</p>
+  <div style="display:flex; align-items:center; justify-content:center; gap:0.4em; margin:0.3em auto 1.2em; width:auto;">
+    <img src="images/factory-logo.svg" alt="Factory" style="width:36px; height:36px;">
+    <span style="font-size:0.65em; font-weight:600; color:var(--tungsten-2); letter-spacing:-0.02em;">Factory</span>
+  </div>
+  <p style="font-size:0.5em; color:var(--tungsten-11); margin-top:0.6em;">𝕏&nbsp; <a href="https://x.com/agent_wrap" style="color:var(--tungsten-7); text-decoration:none;">@agent_wrap</a></p>
+</section>
+
+<!-- Slide 3: Bug fix runbook -->
+<section>
+  <h2>Bug fix runbook</h2>
+  <ol class="number-list">
+    <li class="fragment">User files bug report</li>
+    <li class="fragment">Eng triages logs, metrics, stacktraces</li>
+    <li class="fragment">Reproduce the bug</li>
+    <li class="fragment">Define a regression test</li>
+    <li class="fragment">Fix the bug and submit a PR</li>
+  </ol>
+  <ul style="margin-top:0.6em;">
+    <li class="fragment">The goal is to <strong>eliminate every bottleneck</strong></li>
+  </ul>
+  <div class="takeaway fragment">
+    <strong>Key insight:</strong> Most of this loop is <em>mechanical</em>. Query logs, correlate, reproduce, patch.
+  </div>
+</section>
+
+<!-- Slide 4: How can we navigate faster -->
+<section>
+  <h2>How can we navigate through this loop faster?</h2>
+  <ul style="margin-top:0.8em;">
+    <li class="fragment">Not just "agent writes code" as that's only a <strong>small portion</strong> of the process.</li>
+    <li class="fragment">An important part is the initial steps: <strong style="color:var(--topaz-2);">observability, reproduction, and testing</strong></li>
+    <li class="fragment">The agent should use <strong style="color:var(--mica-5);">the same systems your engineers use</strong>.</li>
+  </ul>
+</section>
+
+<section class="center-slide">
+  <h2>Quick primer on Skills</h2>
+</section>
+
+<!-- Slide 5: Skills -->
+<section>
+  <h2>Skills = procedural memory for agents</h2>
+  <ul>
+    <li class="fragment">A <code>SKILL.md</code> file: name, description, content</li>
+    <li class="fragment">Not just a prompt template. It's a <strong>runbook</strong> the agent follows.</li>
+    <li class="fragment">Composable: <code>/bug-report</code> → <code>/axiom-query</code> → <code>/droid-control</code> → ...</li>
+  </ul>
+  <pre class="fragment"><code class="yaml" data-trim>
+---
+name: bug-report
+description: Analyze CLI bug reports from S3.
+  Query Axiom for logs, metrics.
+  Parses session logs, and groups errors by root cause.
+---
+# Daily CLI Bug Report Analysis
+## Workflow
+1. Download and extract reports from S3     + script
+2. Query Axiom for logs and metrics         → /axiom-query
+3. Parse session logs, extract errors       + schemas + scripts
+4. Reproduce in sandboxed TUI               → /droid-control
+5. Write an e2e regression test             → /droid-control
+  </code></pre>
+</section>
+
+<!-- Slide 6: The self-healing toolkit -->
+<section>
+  <h2>The self-healing toolkit</h2>
+  <div style="margin-top:0.4em; text-align:left;">
+    <div class="arch-row fragment">
+      <span class="arch-source">Bug Reports (S3)</span>
+      <span class="arch-arrow">→</span>
+      <code>/bug-report</code>
+      <span class="arch-arrow">→</span>
+      <span class="arch-output">bug report id</span>
+    </div>
+    <div class="arch-row fragment">
+      <span class="arch-source">Queryable Logs</span>
+      <span class="arch-arrow">→</span>
+      <code>/axiom-query</code>
+      <span class="arch-arrow">→</span>
+      <span class="arch-output">axiom cli/mcp</span>
+    </div>
+    <div class="arch-row fragment">
+      <span class="arch-source">Sandboxed TUI</span>
+      <span class="arch-arrow">→</span>
+      <code>/droid-control</code>
+      <span class="arch-arrow">→</span>
+      <span class="arch-output">tuistory</span>
+    </div>
+    <div class="arch-row fragment">
+      <span class="arch-source">E2E Tests</span>
+      <span class="arch-arrow">→</span>
+      <code>/cli-e2e-testing</code>
+    </div>
+    <div class="arch-row fragment">
+      <span class="arch-source">PR Pipeline</span>
+      <span class="arch-arrow">→</span>
+      <code>/create-pr</code>
+      <span class="arch-arrow">+</span>
+      <code>/follow-up-on-pr</code>
+    </div>
+  </div>
+  <p class="fragment" style="margin-top:0.7em; font-size:0.6em; color:var(--tungsten-11);">
+    ~40 skills in our repo
+  </p>
+</section>
+
+<!-- Slide 7: Step 1 - Bug reporting -->
+<section>
+  <h2>Step 1: bug reporting</h2>
+  <ul>
+    <li class="fragment">Make it <strong style="color:var(--mica-5);">really easy</strong> for users to report issues directly from the product</li>
+  </ul>
+  <p class="fragment" style="margin:0.4em 0;"><code>/bug should be able to fuzzy search models in the /models menu</code></p>
+  <ul>
+    <li class="fragment">Upload bug bundle with relevant metrics
+      <ul>
+        <li>droid version</li>
+        <li>terminal emulator</li>
+        <li>platform + OS</li>
+        <li>session logs</li>
+      </ul>
+    </li>
+    <li class="fragment">Give them a <strong>UUID</strong> for them to track and follow up if needed</li>
+  </ul>
+</section>
+
+<!-- Slide 7b: Step 1 - Bug reporting (demo) -->
+<section>
+  <h2>Step 1: bug reporting</h2>
+  <video class="demo-video" data-video-slot="bug-report" controls src="videos/bug-report.mp4"></video>
+</section>
+
+<!-- Slide 8: Step 2 - Triage -->
+<section>
+  <h2>Step 2: triage</h2>
+  <h3><code>/bug-report</code> → <code>/axiom-query</code> + code navigation</h3>
+  <ul>
+    <li class="fragment"><code>/bug-report</code> downloads from S3, extracts errors</li>
+    <li class="fragment"><code>/axiom-query</code> gathers metrics and logs</li>
+  </ul>
+  <div class="takeaway fragment">
+    <strong>Key technique:</strong> The agent runs the <em>same queries your oncall engineers run</em>. It needs access to your observability platform's query language.
+  </div>
+</section>
+
+<!-- Slide 9: Step 3 - Reproduction -->
+<section>
+  <h2>Step 3: reproduction (live demo or video)</h2>
+  <h3><code>/droid-control</code> · tuistory</h3>
+  <ul>
+    <li class="fragment"><strong style="color:var(--mica-5);">tuistory</strong>: a Playwright-like framework for terminal UIs. Launch, type, press keys, wait, snapshot.</li>
+    <li class="fragment">Droid builds its own binary, launches in a sandboxed session, triggers the bug, captures evidence</li>
+  </ul>
+  <pre class="fragment"><code class="bash" data-trim>
+tuistory launch "droid" -s repro --cols 120 --rows 40
+tuistory -s repro wait ">"
+tuistory -s repro snapshot
+
+tuistory -s repro type "/model"
+tuistory -s repro press enter
+tuistory -s repro snapshot
+
+tuistory -s repro type "opus"
+tuistory -s repro snapshot
+
+tuistory -s repro type "4"
+tuistory -s repro snapshot
+  </code></pre>
+  <div class="takeaway fragment">
+    <strong>Takeaway:</strong> If the agent can't reproduce, it can't verify. Give it a sandboxed environment to run the product end-to-end.
+  </div>
+</section>
+
+<!-- Slide 9b: Step 3 - Reproduction (demo) -->
+<section>
+  <h2>Step 3: reproduction (live demo or video)</h2>
+  <video class="demo-video" data-video-slot="tuistory" controls src="videos/tuistory.mp4"></video>
+</section>
+
+<!-- Slide 10: Step 4 - E2E regression test -->
+<section>
+  <h2>Step 4: e2e regression test</h2>
+  <h3><code>/cli-e2e-testing</code></h3>
+  <ul>
+    <li class="fragment">Framework: <code>@microsoft/tui-test</code> -- a Playwright-like framework for terminal UIs.</li>
+    <li class="fragment">Each test gets an <strong>isolated workspace</strong> (project dir + simulated user home).</li>
+    <li class="fragment">TUI Traces are automatically recorded, droid can inspect terminal state at any point in time.</li>
+  </ul>
+  <pre class="fragment"><code class="typescript" data-trim>
+test('fuzzy matches "opus4.6" to "Opus 4.6"', async ({ terminal }) => {
+  await expect(
+    terminal.getByText('>', { full: false, strict: false })
+  ).toBeVisible({ timeout: 15000 });
+
+  // Open model selector via /model command
+  terminal.write('/model\r');
+
+  // Wait for model selector to appear
+  await expect(
+    terminal.getByText('Factory Provided Models', {
+      full: false, strict: false,
+    })
+  ).toBeVisible({ timeout: 10000 });
+
+  // Type fuzzy query without space
+  terminal.write('opus4.6');
+
+  // Should show Opus 4.6 as a match (fuzzy matching)
+  await expect(
+    terminal.getByText('Opus 4.6', { full: false, strict: false })
+  ).toBeVisible({ timeout: 3000 });
+});
+  </code></pre>
+</section>
+
+<!-- Slide 11: Step 5 - Fix + ship -->
+<section>
+  <h2>Step 5: fix + ship</h2>
+  <h3><code>/create-pr</code> · <code>/follow-up-on-pr</code></h3>
+  <ul>
+    <li class="fragment"><code>/create-pr</code>: lint + commit + branch + pr</li>
+    <li class="fragment"><code>/follow-up-on-pr</code>: rebases, addresses feedback, fixes CI</li>
+  </ul>
+</section>
+
+<!-- Slide 12: Extra notes -->
+<section>
+  <h2>Extra notes</h2>
+  <ol class="number-list">
+    <li class="fragment"><strong>Skills are often not picked up automatically.</strong><span class="sub">Be explicit if you can (for now)</span></li>
+    <li class="fragment"><strong>Provide as much evidence as you can.</strong><span class="sub">Such as previous steps that led the user here</span></li>
+    <li class="fragment"><strong>Instrument your code as much as possible.</strong><span class="sub">With logs, metrics; and log that into queryable stores</span></li>
+  </ol>
+</section>
+
+<!-- Slide 13: How you can do this -->
+<section>
+  <h2>How you can do this</h2>
+  <ol class="number-list">
+    <li class="fragment"><strong>Write your runbooks as machine-readable skills.</strong><span class="sub">Start with your oncall playbook. If a human follows steps, an agent can too.</span></li>
+    <li class="fragment"><strong>Give the agent read-only query access to your observability stack.</strong><span class="sub">Axiom, Datadog, Grafana. And also show some example queries.</span></li>
+    <li class="fragment"><strong>Build a sandboxed reproduction environment.</strong><span class="sub">Docker, tuistory, Playwright. The agent needs to run your product and observe it fail.</span></li>
+    <li class="fragment"><strong>Make regression tests the success criterion.</strong><span class="sub">Not "does the code look right" but "does the test that previously failed now pass."</span></li>
+  </ol>
+</section>
+
+<!-- Slide: Full demo - bug to PR -->
+<section>
+  <h2>Full demo: bug to PR</h2>
+  <video class="demo-video" controls src="videos/bug-to-pr.mp4"></video>
+</section>
+
+<section>
+  <img src="images/screenshot-bug-to-pr.png" alt="Bug to PR result" style="width:100%; max-width:900px; margin:0 auto; border-radius:8px; border:1px solid var(--tungsten-16);">
+</section>
+
+<section>
+  <img src="images/screenshot-bug-to-pr-2.png" alt="Bug to PR result 2" style="width:100%; max-width:900px; margin:0 auto; border-radius:8px; border:1px solid var(--tungsten-16);">
+</section>
+
+<!-- Slide 14: Q&A -->
+<section class="center-slide" data-background-color="#161413">
+  <h1 style="font-size:1.8em;">Q&A</h1>
+  <div class="accent-line"></div>
+  <p style="font-size:0.55em; color:var(--tungsten-7); margin-top:0.8em;">David Gu — Member of Technical Staff</p>
+  <div style="display:flex; align-items:center; justify-content:center; gap:0.4em; margin:0.3em auto 1.2em; width:auto;">
+    <img src="images/factory-logo.svg" alt="Factory" style="width:36px; height:36px;">
+    <span style="font-size:0.65em; font-weight:600; color:var(--tungsten-2); letter-spacing:-0.02em;">Factory</span>
+  </div>
+  <p style="font-size:0.5em; color:var(--tungsten-11); margin-top:0.6em;">𝕏&nbsp; <a href="https://x.com/agent_wrap" style="color:var(--tungsten-7); text-decoration:none;">@agent_wrap</a></p>
+</section>
+
+</div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+<script>
+Reveal.initialize({
+  width: 1280,
+  height: 800,
+  hash: true,
+  slideNumber: 'c/t',
+  showSlideNumber: 'all',
+  controls: true,
+  controlsTutorial: false,
+  controlsLayout: 'bottom-right',
+  progress: true,
+  center: false,
+  transition: 'slide',
+  transitionSpeed: 'default',
+  backgroundTransition: 'fade',
+
+  plugins: [ RevealHighlight, RevealNotes ]
+});
+
+</script>
+
+
+
+
+</body>
+</html>
