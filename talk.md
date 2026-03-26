@@ -10,13 +10,12 @@ A coding agent that lives inside your terminal.
 
 ---
 
-Software will never be perfect,
-but we all strive to make it as **reliable** as possible,
-while also being able to **move fast**.
+Let your agents
+move fast and break things
+then let them fix it themselves
 
----
-
-### How can we iterate faster these days?
+- First shows: move fast and break things
+- Then "Let your agents" and "then let them fix it themselves" fade in
 
 ---
 
@@ -28,6 +27,11 @@ David Gu - Member of Technical Staff @ Factory
 
 ---
 
+And as every piece of software out there...
+we have bugs
+
+---
+
 ### Bug fix runbook
 
 1. User files bug report
@@ -36,7 +40,7 @@ David Gu - Member of Technical Staff @ Factory
 4. Define a regression test
 5. Fix the bug and submit a PR
 
-- The goal is to **eliminate every bottleneck**
+- The goal of a good engineering system is to **reduce every bottleneck**
 
 **Key insight:** Most of this loop is *mechanical*. Query logs, correlate, reproduce, patch.
 
@@ -44,9 +48,9 @@ David Gu - Member of Technical Staff @ Factory
 
 ### How can we navigate through this loop faster?
 
-- Not just "agent writes code" as that's only a **small portion** of the process.
-- An important part is the initial steps: **observability, reproduction, and testing**
-- The agent should use **the same systems your engineers use**.
+- Agents should use *the same systems your engineers use*
+- Agents write code, but that's *half of the problem*
+- We will focus on these steps: *observability, reproduction, and testing*
 
 ---
 
@@ -56,16 +60,17 @@ David Gu - Member of Technical Staff @ Factory
 
 ### Skills = procedural memory for agents
 
-- A `SKILL.md` file: name, description, content
-- Not just a prompt template. It's a **runbook** the agent follows.
+- A `SKILL.md` markdown file with frontmatter metadata (name, description, etc)
+- Plus scripts that the skill may invoke
 - Composable: `/bug-report` -> `/axiom-query` -> `/droid-control` -> ...
+- Not just a prompt template. It's a **runbook** the agent follows.
 
 ```yaml
 ---
 name: bug-report
 description: Analyze CLI bug reports from S3.
   Query Axiom for logs, metrics.
-  Parses session logs, and groups errors by root cause.
+  Parses session logs and groups errors by root cause.
 ---
 # Daily CLI Bug Report Analysis
 ## Workflow
@@ -101,7 +106,7 @@ PR Pipeline      -> `/create-pr` + `/follow-up-on-pr`
   - terminal emulator
   - platform + OS
   - session logs
-- Give them a **UUID** for them to track and follow up if needed
+- Give them a **UUID** to track and follow up if needed
 
 ---
 
@@ -122,18 +127,22 @@ PR Pipeline      -> `/create-pr` + `/follow-up-on-pr`
 
 ---
 
+### Step 2: triage (demo)
+
+[VIDEO: axiom.mp4]
+
+---
+
 ### Step 3: reproduction (live demo or video)
 
 `/droid-control` - tuistory
 
 - **tuistory**: a Playwright-like framework for terminal UIs. Launch, type, press keys, wait, snapshot.
-- Droid builds its own binary, launches in a sandboxed session, triggers the bug, captures evidence
+- Droid launches an instance of itself in a sandboxed session, triggers the bug, captures evidence
 
 ```bash
 tuistory launch "droid" -s repro --cols 120 --rows 40
 tuistory -s repro wait ">"
-tuistory -s repro snapshot
-
 tuistory -s repro type "/model"
 tuistory -s repro press enter
 tuistory -s repro snapshot
@@ -145,10 +154,6 @@ tuistory -s repro type "4"
 tuistory -s repro snapshot
 ```
 
-**Takeaway:** If the agent can't reproduce, it can't verify. Give it a sandboxed environment to run the product end-to-end.
-
----
-
 ### Step 3: reproduction (demo)
 
 [VIDEO: tuistory.mp4]
@@ -159,9 +164,9 @@ tuistory -s repro snapshot
 
 `/cli-e2e-testing`
 
-- Framework: `@microsoft/tui-test` - a Playwright-like framework for terminal UIs.
+- Framework: `@microsoft/tui-test` -- a Playwright-like framework for terminal UIs.
 - Each test gets an **isolated workspace** (project dir + simulated user home).
-- TUI Traces are automatically recorded, droid can inspect terminal state at any point in time.
+- TUI traces are automatically recorded; Droid can inspect terminal state at any point in time.
 
 ```typescript
 test('fuzzy matches "opus4.6" to "Opus 4.6"', async ({ terminal }) => {
@@ -200,11 +205,21 @@ test('fuzzy matches "opus4.6" to "Opus 4.6"', async ({ terminal }) => {
 
 ---
 
+### Full demo: bug to PR
+
+[VIDEO: bug-to-pr.mp4]
+
+---
+
+[SCREENSHOT: screenshot-bug-to-pr.png]
+
+---
+
 ### Extra notes
 
 1. **Skills are often not picked up automatically.** Be explicit if you can (for now)
-2. **Provide as much evidence as you can.** Such as previous steps that led the user here
-3. **Instrument your code as much as possible.** With logs, metrics; and log that into queryable stores
+2. **MCPs work too.** Just be careful of context bloating
+3. **Instrument your code as much as possible.** With logs and metrics, and log them into queryable stores
 
 ---
 
@@ -214,16 +229,6 @@ test('fuzzy matches "opus4.6" to "Opus 4.6"', async ({ terminal }) => {
 2. **Give the agent read-only query access to your observability stack.** Axiom, Datadog, Grafana. And also show some example queries.
 3. **Build a sandboxed reproduction environment.** Docker, tuistory, Playwright. The agent needs to run your product and observe it fail.
 4. **Make regression tests the success criterion.** Not "does the code look right" but "does the test that previously failed now pass."
-
----
-
-### Full demo: bug to PR
-
-[VIDEO: bug-to-pr.mp4]
-
----
-
-[SCREENSHOT: screenshot-bug-to-pr.png]
 
 ---
 

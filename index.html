@@ -320,10 +320,14 @@
   }
 
   .number-list { counter-reset: item; list-style: none !important; padding-left: 0; text-align: left; }
-  .number-list li { counter-increment: item; padding-left: 2.2em; text-indent: -2.2em; margin-bottom: 0.3em; }
+  .number-list li { counter-increment: item; position: relative; padding-left: 2.2em; margin-bottom: 0.3em; }
   .number-list li::before {
     content: counter(item);
-    display: inline-flex;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
     align-items: center;
     justify-content: center;
     width: 1.4em;
@@ -333,10 +337,9 @@
     border-radius: 50%;
     font-weight: 700;
     font-size: 0.7em;
-    margin-right: 0.5em;
-    vertical-align: middle;
+    text-indent: 0;
   }
-  .number-list li .sub { display: block; font-size: 0.85em; color: var(--tungsten-7); padding-left: 2.2em; margin-top: 0.1em; }
+  .number-list li .sub { display: block; font-size: 0.85em; color: var(--tungsten-7); padding-left: 0; margin-top: 0.1em; }
 
   .controls { color: var(--mica-4) !important; }
   .progress span { background: var(--mica-4) !important; }
@@ -378,18 +381,13 @@
 <section class="center-slide" data-background-image="images/opening-bg.jpg" data-background-size="contain" data-background-color="#161413">
 </section>
 
-<!-- Slide 3: Reliability -->
+<!-- Slide 3: Move fast and break things -->
 <section class="center-slide" data-background-color="#161413">
-  <p style="font-size:0.85em; color:var(--tungsten-2); line-height:1.8;">
-    <span class="fragment">Software will never be perfect,</span><br>
-    <span class="fragment">but we all strive to make it as <strong style="color:var(--mica-5);">reliable</strong> as possible,</span><br>
-    <span class="fragment">while also being able to <strong style="color:var(--jade-3);">move fast</strong>.</span>
-  </p>
-</section>
-
-<!-- Slide 4: How can we iterate faster -->
-<section class="center-slide" data-background-color="#161413">
-  <h1 style="font-size:1.6em; margin-bottom:0;">How can we iterate faster these days?</h1>
+  <h1 style="font-size:1.4em; margin-bottom:0;">
+    <span class="fragment fade-in" data-fragment-index="1">Let your agents<br></span>
+    <span>move fast and break things</span>
+    <span class="fragment fade-in" data-fragment-index="2"><br>then let them fix it themselves</span>
+  </h1>
 </section>
 
 <!-- Slide 5: Title -->
@@ -412,6 +410,12 @@
   <img class="fragment" src="images/droid-tui.png" alt="Droid TUI" style="width:100%; max-width:800px; margin:0.5em auto; border-radius:8px; border:1px solid var(--tungsten-16);">
 </section>
 
+<!-- Slide: We have bugs -->
+<section class="center-slide" data-background-color="#161413">
+  <p style="font-size:0.85em; color:var(--tungsten-2);">And as every piece of software out there...</p>
+  <p class="fragment" style="font-size:1.4em; font-weight:800; color:var(--tungsten-1); margin-top:0.4em;">we have bugs</p>
+</section>
+
 <!-- Slide 3: Bug fix runbook -->
 <section>
   <h2>Bug fix runbook</h2>
@@ -423,7 +427,7 @@
     <li class="fragment">Fix the bug and submit a PR</li>
   </ol>
   <ul style="margin-top:0.6em;">
-    <li class="fragment">The goal is to <strong>eliminate every bottleneck</strong></li>
+    <li class="fragment">The goal of a good engineering system is to <strong>reduce every bottleneck</strong></li>
   </ul>
   <div class="takeaway fragment">
     <strong>Key insight:</strong> Most of this loop is <em>mechanical</em>. Query logs, correlate, reproduce, patch.
@@ -434,9 +438,9 @@
 <section>
   <h2>How can we navigate through this loop faster?</h2>
   <ul style="margin-top:0.8em;">
-    <li class="fragment">Not just "agent writes code" as that's only a <strong>small portion</strong> of the process.</li>
-    <li class="fragment">An important part is the initial steps: <strong style="color:var(--topaz-2);">observability, reproduction, and testing</strong></li>
-    <li class="fragment">The agent should use <strong style="color:var(--mica-5);">the same systems your engineers use</strong>.</li>
+    <li class="fragment">Agents should use <strong style="color:var(--topaz-2);">the same systems your engineers use</strong></li>
+    <li class="fragment">Agents write code, but that's <strong style="color:var(--topaz-2);">half of the problem</strong></li>
+    <li class="fragment">We will focus on these steps: <strong style="color:var(--topaz-2);">observability, reproduction, and testing</strong></li>
   </ul>
 </section>
 
@@ -448,16 +452,17 @@
 <section>
   <h2>Skills = procedural memory for agents</h2>
   <ul>
-    <li class="fragment">A <code>SKILL.md</code> file: name, description, content</li>
+    <li class="fragment">A <code>SKILL.md</code> markdown file with frontmatter metadata (name, description, etc)</li>
+    <li class="fragment">Plus scripts that the skill may invoke</li>
+    <li class="fragment">Composable: <code>/bug-report</code> <span class="fragment">→ <code>/axiom-query</code></span> <span class="fragment">→ <code>/droid-control</code></span> <span class="fragment">→ ...</span></li>
     <li class="fragment">Not just a prompt template. It's a <strong>runbook</strong> the agent follows.</li>
-    <li class="fragment">Composable: <code>/bug-report</code> → <code>/axiom-query</code> → <code>/droid-control</code> → ...</li>
   </ul>
-  <pre class="fragment"><code class="yaml" data-trim>
+  <pre class="fragment" style="font-size:1.1em;"><code class="yaml" data-trim>
 ---
 name: bug-report
 description: Analyze CLI bug reports from S3.
   Query Axiom for logs, metrics.
-  Parses session logs, and groups errors by root cause.
+  Parses session logs and groups errors by root cause.
 ---
 # Daily CLI Bug Report Analysis
 ## Workflow
@@ -518,7 +523,7 @@ description: Analyze CLI bug reports from S3.
   <ul>
     <li class="fragment">Make it <strong style="color:var(--mica-5);">really easy</strong> for users to report issues directly from the product</li>
   </ul>
-  <p class="fragment" style="margin:0.4em 0;"><code>/bug should be able to fuzzy search models in the /models menu</code></p>
+  <p class="fragment" style="margin:0.4em 0; padding-left:2em;"><code>/bug should be able to fuzzy search models in the /models menu</code></p>
   <ul>
     <li class="fragment">Upload bug bundle with relevant metrics
       <ul>
@@ -528,7 +533,7 @@ description: Analyze CLI bug reports from S3.
         <li>session logs</li>
       </ul>
     </li>
-    <li class="fragment">Give them a <strong>UUID</strong> for them to track and follow up if needed</li>
+    <li class="fragment">Give them a <strong>UUID</strong> to track and follow up if needed</li>
   </ul>
 </section>
 
@@ -551,19 +556,23 @@ description: Analyze CLI bug reports from S3.
   </div>
 </section>
 
+<!-- Slide 8b: Step 2 - Triage (demo) -->
+<section>
+  <h2>Step 2: triage</h2>
+  <video class="demo-video" data-video-slot="axiom" controls src="videos/axiom.mp4"></video>
+</section>
+
 <!-- Slide 9: Step 3 - Reproduction -->
 <section>
   <h2>Step 3: reproduction (live demo or video)</h2>
   <h3><code>/droid-control</code> · tuistory</h3>
   <ul>
     <li class="fragment"><strong style="color:var(--mica-5);">tuistory</strong>: a Playwright-like framework for terminal UIs. Launch, type, press keys, wait, snapshot.</li>
-    <li class="fragment">Droid builds its own binary, launches in a sandboxed session, triggers the bug, captures evidence</li>
+    <li class="fragment">Droid launches an instance of itself in a sandboxed session, triggers the bug, captures evidence</li>
   </ul>
-  <pre class="fragment"><code class="bash" data-trim>
+  <pre class="fragment" style="font-size:1.1em;"><code class="bash" data-trim>
 tuistory launch "droid" -s repro --cols 120 --rows 40
 tuistory -s repro wait ">"
-tuistory -s repro snapshot
-
 tuistory -s repro type "/model"
 tuistory -s repro press enter
 tuistory -s repro snapshot
@@ -572,11 +581,7 @@ tuistory -s repro type "opus"
 tuistory -s repro snapshot
 
 tuistory -s repro type "4"
-tuistory -s repro snapshot
-  </code></pre>
-  <div class="takeaway fragment">
-    <strong>Takeaway:</strong> If the agent can't reproduce, it can't verify. Give it a sandboxed environment to run the product end-to-end.
-  </div>
+tuistory -s repro snapshot</code></pre>
 </section>
 
 <!-- Slide 9b: Step 3 - Reproduction (demo) -->
@@ -592,7 +597,7 @@ tuistory -s repro snapshot
   <ul>
     <li class="fragment">Framework: <code>@microsoft/tui-test</code> -- a Playwright-like framework for terminal UIs.</li>
     <li class="fragment">Each test gets an <strong>isolated workspace</strong> (project dir + simulated user home).</li>
-    <li class="fragment">TUI Traces are automatically recorded, droid can inspect terminal state at any point in time.</li>
+    <li class="fragment">TUI traces are automatically recorded; Droid can inspect terminal state at any point in time.</li>
   </ul>
   <pre class="fragment"><code class="typescript" data-trim>
 test('fuzzy matches "opus4.6" to "Opus 4.6"', async ({ terminal }) => {
@@ -631,13 +636,23 @@ test('fuzzy matches "opus4.6" to "Opus 4.6"', async ({ terminal }) => {
   </ul>
 </section>
 
+<!-- Slide: Full demo - bug to PR -->
+<section>
+  <h2>Full demo: bug to PR</h2>
+  <video class="demo-video" controls src="videos/bug-to-pr.mp4"></video>
+</section>
+
+<section>
+  <img src="images/screenshot-bug-to-pr.png" alt="Bug to PR result" style="width:100%; max-width:900px; margin:0 auto; border-radius:8px; border:1px solid var(--tungsten-16);">
+</section>
+
 <!-- Slide 12: Extra notes -->
 <section>
   <h2>Extra notes</h2>
   <ol class="number-list">
     <li class="fragment"><strong>Skills are often not picked up automatically.</strong><span class="sub">Be explicit if you can (for now)</span></li>
-    <li class="fragment"><strong>Provide as much evidence as you can.</strong><span class="sub">Such as previous steps that led the user here</span></li>
-    <li class="fragment"><strong>Instrument your code as much as possible.</strong><span class="sub">With logs, metrics; and log that into queryable stores</span></li>
+    <li class="fragment"><strong>MCPs work too.</strong><span class="sub">Just be careful of context bloating</span></li>
+    <li class="fragment"><strong>Instrument your code as much as possible.</strong><span class="sub">With logs and metrics, and log them into queryable stores</span></li>
   </ol>
 </section>
 
@@ -650,16 +665,6 @@ test('fuzzy matches "opus4.6" to "Opus 4.6"', async ({ terminal }) => {
     <li class="fragment"><strong>Build a sandboxed reproduction environment.</strong><span class="sub">Docker, tuistory, Playwright. The agent needs to run your product and observe it fail.</span></li>
     <li class="fragment"><strong>Make regression tests the success criterion.</strong><span class="sub">Not "does the code look right" but "does the test that previously failed now pass."</span></li>
   </ol>
-</section>
-
-<!-- Slide: Full demo - bug to PR -->
-<section>
-  <h2>Full demo: bug to PR</h2>
-  <video class="demo-video" controls src="videos/bug-to-pr.mp4"></video>
-</section>
-
-<section>
-  <img src="images/screenshot-bug-to-pr.png" alt="Bug to PR result" style="width:100%; max-width:900px; margin:0 auto; border-radius:8px; border:1px solid var(--tungsten-16);">
 </section>
 
 <!-- Slide 14: Q&A -->
