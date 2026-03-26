@@ -146,13 +146,13 @@ tuistory launch "droid" -s repro --cols 120 --rows 40
 tuistory -s repro wait ">"
 tuistory -s repro type "/model"
 tuistory -s repro press enter
-tuistory -s repro snapshot
+tuistory -s repro snapshot --trim
 
 tuistory -s repro type "opus"
-tuistory -s repro snapshot
+tuistory -s repro snapshot --trim
 
 tuistory -s repro type "4"
-tuistory -s repro snapshot
+tuistory -s repro snapshot --trim
 ```
 
 ### Step 3: reproduction (demo)
