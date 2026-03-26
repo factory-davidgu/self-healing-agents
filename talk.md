@@ -218,8 +218,8 @@ test('fuzzy matches "opus4.6" to "Opus 4.6"', async ({ terminal }) => {
 ### Extra notes
 
 1. **Skills are often not picked up automatically.** Be explicit if you can (for now)
-2. **MCPs work too.** Just be careful of context bloating
-3. **Start building skills locally** and then share them with your team via a plugin marketplace or by committing them to a specific repo
+2. **MCPs work too.** They're not dead. Just be careful of context bloating
+3. **Start building skills locally** Then share them with your team via a plugin marketplace or by committing them to a specific repo
 
 ---
 
@@ -238,7 +238,7 @@ The same pattern applies to other engineering workflows:
 1. **Write your runbooks as machine-readable skills.** Start with your oncall playbook. If a human follows steps, an agent can too.
 2. **Give the agent read-only query access to your observability stack.** Axiom, Datadog, Grafana. Show some example queries too.
 3. **Build a sandboxed reproduction environment.** Docker, tuistory, Playwright. The agent needs to run your product and observe it fail.
-4. **Make regression tests the success criterion.** Not "does the code look right" but "does the test that previously failed now pass."
+4. **Make regression tests the success criterion.** Red first, Green next. Not "does the code look right" but "does the test that previously failed now pass." So many cases of agents adding `expect(true).toBe(true)` (or similar)
 5. **Instrument your code as much as possible.** With logs and metrics, and log them into queryable stores.
 
 ---
