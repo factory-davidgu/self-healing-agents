@@ -12,10 +12,10 @@ A multi-model coding agent that lives on your terminal, in your IDE, in your Sla
 
 Let your agents
 move fast and break things
-then let them fix it themselves
+then fix it themselves
 
 - First shows: move fast and break things
-- Then "Let your agents" and "then let them fix it themselves" fade in
+- Then "Let your agents" and "then fix it themselves" fade in
 
 ---
 
