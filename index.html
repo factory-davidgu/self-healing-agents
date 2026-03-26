@@ -395,7 +395,7 @@
   <h1 style="font-size:1.7em; margin-bottom:0;">Self-healing agents</h1>
   <div class="accent-line"></div>
   <p style="font-size:0.85em; color:var(--mica-4); margin:0.3em 0 0.8em;">How Droid closes its own feedback loop</p>
-  <p style="font-size:0.55em; color:var(--tungsten-7);">David Gu — Member of Technical Staff</p>
+  <p style="font-size:0.55em; color:var(--tungsten-7);">David Gu, Member of Technical Staff</p>
   <div style="display:flex; align-items:center; justify-content:center; gap:0.4em; margin:0.3em auto 1.2em; width:auto;">
     <img src="images/factory-logo.svg" alt="Factory" style="width:36px; height:36px;">
     <span style="font-size:0.65em; font-weight:600; color:var(--tungsten-2); letter-spacing:-0.02em;">Factory</span>
@@ -595,7 +595,7 @@ tuistory -s repro snapshot</code></pre>
   <h2>Step 4: e2e regression test</h2>
   <h3><code>/cli-e2e-testing</code></h3>
   <ul>
-    <li class="fragment">Framework: <code>@microsoft/tui-test</code> -- a Playwright-like framework for terminal UIs.</li>
+    <li class="fragment">Framework: <code>@microsoft/tui-test</code>, a Playwright-like framework for terminal UIs.</li>
     <li class="fragment">Each test gets an <strong>isolated workspace</strong> (project dir + simulated user home).</li>
     <li class="fragment">TUI traces are automatically recorded; Droid can inspect terminal state at any point in time.</li>
   </ul>
@@ -667,11 +667,24 @@ test('fuzzy matches "opus4.6" to "Opus 4.6"', async ({ terminal }) => {
   </ol>
 </section>
 
+<!-- Slide: Safety first -->
+<section>
+  <h2>Safety first</h2>
+  <p class="fragment" style="font-size:0.8em; color:var(--tungsten-2); margin-bottom:0.6em;">Be careful of how you inject external dynamic content</p>
+  <ul>
+    <li class="fragment"><strong style="color:var(--ruby-3);">Clinejection (2026):</strong> a malicious GitHub issue title prompt-injected an AI triage bot, compromising ~4,000 developer machines</li>
+    <li class="fragment"><strong>Sanitize external inputs.</strong> Issue titles, PR descriptions, user comments. All untrusted content that agents ingest</li>
+    <li class="fragment"><strong>Principle of least privilege.</strong> Read-only where possible, limit scope</li>
+    <li class="fragment"><strong>Sandboxed environments with fine-grained controls.</strong> Restricted network access and filesystem</li>
+  </ul>
+</section>
+
 <!-- Slide: What's next -->
 <section class="center-slide" data-background-color="#161413">
   <h1 style="font-size:1.6em; margin-bottom:0.4em;">What's next?</h1>
   <p style="font-size:0.85em; color:var(--tungsten-2); line-height:1.8;">
     <span class="fragment">Automating the process.</span><br>
+    <span class="fragment">High fidelity simulations.</span><br>
     <span class="fragment">Becoming a <strong style="color:var(--mica-5);">Dark Factory</strong></span>
   </p>
 </section>
@@ -680,13 +693,13 @@ test('fuzzy matches "opus4.6" to "Opus 4.6"', async ({ terminal }) => {
 <section class="center-slide" data-background-color="#161413">
   <h1 style="font-size:1.8em;">Q&A</h1>
   <div class="accent-line"></div>
-  <p style="font-size:0.95em; color:var(--tungsten-7); margin-top:0.8em;">David Gu — Member of Technical Staff</p>
+  <p style="font-size:0.95em; color:var(--tungsten-7); margin-top:0.8em;">David Gu, Member of Technical Staff</p>
   <div style="display:flex; align-items:center; justify-content:center; gap:0.5em; margin:0.3em auto 1.2em; width:auto;">
     <img src="images/factory-logo.svg" alt="Factory" style="width:52px; height:52px;">
     <span style="font-size:1.05em; font-weight:600; color:var(--tungsten-2); letter-spacing:-0.02em;">Factory</span>
   </div>
   <p style="font-size:0.85em; color:var(--tungsten-11); margin-top:0.6em;">𝕏&nbsp; <a href="https://x.com/agent_wrap" style="color:var(--tungsten-7); text-decoration:none;">@agent_wrap</a></p>
-  <p style="font-size:0.75em; color:var(--mica-5); margin-top:1.2em;">We are hiring — <a href="https://factory.ai/careers" style="color:var(--mica-6); text-decoration:none;">factory.ai/careers</a></p>
+  <p style="font-size:0.75em; color:var(--mica-5); margin-top:1.2em;">We are hiring. < href="https://factory.ai/careers" style="color:var(--mica-6); text-decoration:none;">factory.ai/careers</a></p>
 </section>
 
 </div>

@@ -164,7 +164,7 @@ tuistory -s repro snapshot
 
 `/cli-e2e-testing`
 
-- Framework: `@microsoft/tui-test` -- a Playwright-like framework for terminal UIs.
+- Framework: `@microsoft/tui-test`, a Playwright-like framework for terminal UIs.
 - Each test gets an **isolated workspace** (project dir + simulated user home).
 - TUI traces are automatically recorded; Droid can inspect terminal state at any point in time.
 
@@ -232,16 +232,28 @@ test('fuzzy matches "opus4.6" to "Opus 4.6"', async ({ terminal }) => {
 
 ---
 
+### Safety first
+
+Be careful of how you inject external dynamic content
+
+- **Clinejection (2026):** a malicious GitHub issue title prompt-injected an AI triage bot, compromising ~4,000 developer machines
+- **Sanitize external inputs.** Issue titles, PR descriptions, user comments. All untrusted content that agents ingest
+- **Principle of least privilege.** Read-only where possible, limit scope
+- **Sandboxed environments with fine-grained controls.** Restricted network access and filesystem
+
+---
+
 ### What's next?
 
 Automating the process.
+High fidelity simulations.
 Becoming a **Dark Factory**
 
 ---
 
 ### Q&A
 
-We are hiring — factory.ai/careers
+We are hiring. factory.ai/careers
 
 David Gu - Member of Technical Staff @ Factory
 
