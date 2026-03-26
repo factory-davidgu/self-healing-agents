@@ -454,6 +454,7 @@
     <li class="fragment">A <code>SKILL.md</code> markdown file with frontmatter metadata (name, description, etc)</li>
     <li class="fragment">Plus scripts that the skill may invoke</li>
     <li class="fragment">Composable: <code>/bug-report</code> <span class="fragment">→ <code>/axiom-query</code></span> <span class="fragment">→ <code>/droid-control</code></span> <span class="fragment">→ ...</span></li>
+    <li class="fragment">Progressive disclosure (lazy injection of context)</li>
     <li class="fragment">Not just a prompt template. It's a <strong>runbook</strong> the agent follows.</li>
   </ul>
   <pre class="fragment" style="font-size:1.1em;"><code class="yaml" data-trim>
@@ -563,7 +564,7 @@ description: Analyze CLI bug reports from S3.
 
 <!-- Slide 9: Step 3 - Reproduction -->
 <section>
-  <h2>Step 3: reproduction (live demo or video)</h2>
+  <h2>Step 3: reproduction</h2>
   <h3><code>/droid-control</code> · tuistory</h3>
   <ul>
     <li class="fragment"><strong style="color:var(--mica-5);">tuistory</strong>: a Playwright-like framework for terminal UIs. Launch, type, press keys, wait, snapshot.</li>
@@ -585,7 +586,7 @@ tuistory -s repro snapshot</code></pre>
 
 <!-- Slide 9b: Step 3 - Reproduction (demo) -->
 <section>
-  <h2>Step 3: reproduction (live demo or video)</h2>
+  <h2>Step 3: reproduction</h2>
   <video class="demo-video" data-video-slot="tuistory" controls src="videos/tuistory.mp4"></video>
 </section>
 
@@ -649,9 +650,9 @@ test('fuzzy matches "opus4.6" to "Opus 4.6"', async ({ terminal }) => {
 <section>
   <h2>Extra notes</h2>
   <ol class="number-list">
-    <li class="fragment"><strong>Skills are often not picked up automatically</strong><span class="sub">Be explicit if you can (for now)</span></li>
+    <li class="fragment"><strong>Skills are often not picked up automatically</strong><span class="sub">Be explicit if you can (for now)</span><span class="sub"><span class="fragment">Skills are now invokable!</span></span></li>
     <li class="fragment"><strong>MCPs work too</strong><span class="sub"><span class="fragment">They're not dead</span></span><span class="sub"><span class="fragment">Just be careful of context bloating</span></span></li>
-    <li class="fragment"><strong>Start building skills locally</strong><span class="sub">Then share them with your team via a plugin marketplace or by committing them to a specific repo</span></li>
+    <li class="fragment"><strong>Start building skills locally</strong><span class="sub">Then share them with your team via a plugin marketplace or by committing them to a specific repo</span><span class="sub"><span class="fragment">Also check out <a href="https://skills.sh" style="color:var(--mica-5);">skills.sh</a> (+90k skills)</span></span></li>
   </ol>
 </section>
 
@@ -710,7 +711,7 @@ test('fuzzy matches "opus4.6" to "Opus 4.6"', async ({ terminal }) => {
     <span style="font-size:1.05em; font-weight:600; color:var(--tungsten-2); letter-spacing:-0.02em;">Factory</span>
   </div>
   <p style="font-size:0.85em; color:var(--tungsten-11); margin-top:0.6em;">𝕏&nbsp; <a href="https://x.com/agent_wrap" style="color:var(--tungsten-7); text-decoration:none;">@agent_wrap</a></p>
-  <p style="font-size:0.75em; color:var(--mica-5); margin-top:1.2em;">We are hiring. < href="https://factory.ai/careers" style="color:var(--mica-6); text-decoration:none;">factory.ai/careers</a></p>
+  <p style="font-size:0.75em; color:var(--mica-5); margin-top:1.2em;">We are hiring. <a href="https://factory.ai/careers" style="color:var(--mica-6); text-decoration:none;">factory.ai/careers</a></p>
 </section>
 
 </div>

@@ -63,6 +63,7 @@ we have bugs
 - A `SKILL.md` markdown file with frontmatter metadata (name, description, etc)
 - Plus scripts that the skill may invoke
 - Composable: `/bug-report` -> `/axiom-query` -> `/droid-control` -> ...
+- Progressive disclosure (lazy injection of context)
 - Not just a prompt template. It's a **runbook** the agent follows.
 
 ```yaml
@@ -133,7 +134,7 @@ PR Pipeline      -> `/create-pr` + `/follow-up-on-pr`
 
 ---
 
-### Step 3: reproduction (live demo or video)
+### Step 3: reproduction
 
 `/droid-control` - tuistory
 
@@ -217,9 +218,9 @@ test('fuzzy matches "opus4.6" to "Opus 4.6"', async ({ terminal }) => {
 
 ### Extra notes
 
-1. **Skills are often not picked up automatically.** Be explicit if you can (for now)
+1. **Skills are often not picked up automatically.** Be explicit if you can (for now). Skills are now invokable!
 2. **MCPs work too.** They're not dead. Just be careful of context bloating
-3. **Start building skills locally** Then share them with your team via a plugin marketplace or by committing them to a specific repo
+3. **Start building skills locally** Then share them with your team via a plugin marketplace or by committing them to a specific repo. Also check out [skills.sh](https://skills.sh) (+90k skills)
 
 ---
 
