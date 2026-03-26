@@ -232,7 +232,16 @@ test('fuzzy matches "opus4.6" to "Opus 4.6"', async ({ terminal }) => {
 
 ---
 
+### What's next?
+
+Automating the process.
+Becoming a **Dark Factory**
+
+---
+
 ### Q&A
+
+We are hiring — factory.ai/careers
 
 David Gu - Member of Technical Staff @ Factory
 
