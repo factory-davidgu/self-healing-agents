@@ -219,16 +219,27 @@ test('fuzzy matches "opus4.6" to "Opus 4.6"', async ({ terminal }) => {
 
 1. **Skills are often not picked up automatically.** Be explicit if you can (for now)
 2. **MCPs work too.** Just be careful of context bloating
-3. **Instrument your code as much as possible.** With logs and metrics, and log them into queryable stores
+3. **Start building skills locally** and then share them with your team via a plugin marketplace or by committing them to a specific repo
+
+---
+
+### Beyond bug fixes: other specialized skills
+
+The same pattern applies to other engineering workflows:
+
+- `/memory-leak-analysis`: Collects V8 heap snapshots over time, classifies objects by growth pattern (only grows = leak, oscillates = healthy GC)
+- `/oncall-alert-triage`: Groups and deduplicates alerts, runs the same investigation queries an oncall engineer would, classifies severity, detects false positives
+- `/automated-qa`: Browser-driven smoke tests against production: OTP login via AgentMail API, new user signup, voucher redemption, cloud session creation
 
 ---
 
 ### How you can do this
 
 1. **Write your runbooks as machine-readable skills.** Start with your oncall playbook. If a human follows steps, an agent can too.
-2. **Give the agent read-only query access to your observability stack.** Axiom, Datadog, Grafana. And also show some example queries.
+2. **Give the agent read-only query access to your observability stack.** Axiom, Datadog, Grafana. Show some example queries too.
 3. **Build a sandboxed reproduction environment.** Docker, tuistory, Playwright. The agent needs to run your product and observe it fail.
 4. **Make regression tests the success criterion.** Not "does the code look right" but "does the test that previously failed now pass."
+5. **Instrument your code as much as possible.** With logs and metrics, and log them into queryable stores.
 
 ---
 

@@ -652,8 +652,19 @@ test('fuzzy matches "opus4.6" to "Opus 4.6"', async ({ terminal }) => {
   <ol class="number-list">
     <li class="fragment"><strong>Skills are often not picked up automatically.</strong><span class="sub">Be explicit if you can (for now)</span></li>
     <li class="fragment"><strong>MCPs work too.</strong><span class="sub">Just be careful of context bloating</span></li>
-    <li class="fragment"><strong>Instrument your code as much as possible.</strong><span class="sub">With logs and metrics, and log them into queryable stores</span></li>
+    <li class="fragment"><strong>Start building skills locally</strong><span class="sub">and then share them with your team via a plugin marketplace or by committing them to a specific repo</span></li>
   </ol>
+</section>
+
+<!-- Slide: Beyond bug fixes -->
+<section>
+  <h2>Beyond bug fixes: other specialized skills</h2>
+  <p style="font-size:0.7em; color:var(--tungsten-5); margin-bottom:0.5em;">The same pattern applies to other engineering workflows:</p>
+  <ul>
+    <li class="fragment"><code>/memory-leak-analysis</code>: <span class="sub">Collects V8 heap snapshots over time, classifies objects by growth pattern (only grows = leak, oscillates = healthy GC)</span></li>
+    <li class="fragment"><code>/oncall-alert-triage</code>: <span class="sub">Groups and deduplicates alerts, runs the same investigation queries an oncall engineer would, classifies severity, detects false positives</span></li>
+    <li class="fragment"><code>/automated-qa</code>: <span class="sub">Browser-driven smoke tests against production: OTP login via AgentMail API, new user signup, voucher redemption, cloud session creation</span></li>
+  </ul>
 </section>
 
 <!-- Slide 13: How you can do this -->
@@ -661,9 +672,10 @@ test('fuzzy matches "opus4.6" to "Opus 4.6"', async ({ terminal }) => {
   <h2>How you can do this</h2>
   <ol class="number-list">
     <li class="fragment"><strong>Write your runbooks as machine-readable skills.</strong><span class="sub">Start with your oncall playbook. If a human follows steps, an agent can too.</span></li>
-    <li class="fragment"><strong>Give the agent read-only query access to your observability stack.</strong><span class="sub">Axiom, Datadog, Grafana. And also show some example queries.</span></li>
+    <li class="fragment"><strong>Give the agent read-only query access to your observability stack.</strong><span class="sub">Axiom, Datadog, Grafana. Show some example queries too.</span></li>
     <li class="fragment"><strong>Build a sandboxed reproduction environment.</strong><span class="sub">Docker, tuistory, Playwright. The agent needs to run your product and observe it fail.</span></li>
     <li class="fragment"><strong>Make regression tests the success criterion.</strong><span class="sub">Not "does the code look right" but "does the test that previously failed now pass."</span></li>
+    <li class="fragment"><strong>Instrument your code as much as possible.</strong><span class="sub">With logs and metrics, and log them into queryable stores.</span></li>
   </ol>
 </section>
 
