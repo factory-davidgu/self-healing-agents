@@ -35,7 +35,7 @@ we have bugs
 ### Bug fix runbook
 
 1. User files bug report
-2. Eng triages logs, metrics, stacktraces
+2. Triage logs, metrics, stacktraces
 3. Reproduce the bug
 4. Define a regression test
 5. Fix the bug and submit a PR
