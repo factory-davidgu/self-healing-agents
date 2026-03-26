@@ -102,6 +102,15 @@
     --azurite-2: #378BC8;
     --azurite-3: #50ACF2;
 
+    /* Presentation size variables — tweak these to scale all slides */
+    --slide-body: 1em;
+    --slide-list: 1em;
+    --slide-takeaway: 0.9em;
+    --slide-splash-title: 2.0em;
+    --slide-splash-body: 1.5em;
+    --slide-center-heading: 2.4em;
+    --slide-code: 1.00em;
+
     --r-background-color: var(--tungsten-19);
     --r-main-color: var(--tungsten-1);
     --r-heading-color: var(--tungsten-1);
@@ -167,13 +176,14 @@
   .reveal h1 { font-size: 2.2em; font-weight: 800; letter-spacing: -0.03em; color: var(--tungsten-1); text-transform: none; }
   .reveal h2 { font-size: 1.45em; font-weight: 700; letter-spacing: -0.02em; color: var(--mica-4); margin-bottom: 0.4em; text-transform: none; }
   .reveal h3 { font-size: 0.75em; font-weight: 500; color: var(--tungsten-7); margin-top: -0.3em; margin-bottom: 0.6em; letter-spacing: -0.01em; text-transform: none; }
-  .reveal p, .reveal li { font-size: 0.75em; line-height: 1.6; color: var(--tungsten-2); letter-spacing: -0.13px; }
+  .reveal p, .reveal li { font-size: var(--slide-body); line-height: 1.6; color: var(--tungsten-2); letter-spacing: -0.13px; margin-bottom: 0.3em; }
   .reveal strong { color: var(--tungsten-1); }
   .reveal ul { list-style: "›  "; padding-left: 1.4em; text-align: left; }
-  .reveal ul li { padding-left: 0.2em; text-indent: 0; }
+  .reveal ul li { padding-left: 0.2em; text-indent: 0; margin-bottom: 0.4em; font-size: inherit; }
   .reveal ul li::marker { color: var(--mica-4); font-weight: 600; }
   .reveal ul ul { list-style: "·  "; padding-left: 1.4em; }
   .reveal ul ul li::marker { color: var(--tungsten-8); }
+  .reveal ul ul li { font-size: 0.85em; }
   .reveal code {
     font-family: var(--r-code-font);
     font-size: 0.85em;
@@ -184,13 +194,13 @@
   }
   .reveal pre { width: 100%; box-shadow: none; margin: 0.4em 0; }
   .reveal pre code {
-    font-size: 0.6em;
+    font-size: var(--slide-code);
     line-height: 1.5;
     padding: 1em 1.2em;
     border-radius: 8px;
     background: var(--tungsten-18);
     border: 1px solid var(--tungsten-16);
-    max-height: 450px;
+    max-height: 550px;
   }
 
   .reveal .slides section {
@@ -254,11 +264,11 @@
     display: flex;
     align-items: center;
     gap: 0;
-    margin: 0.3em 0;
-    font-size: 0.6em;
+    margin: 0.5em 0;
+    font-size: var(--slide-body);
   }
   .arch-source {
-    min-width: 140px;
+    min-width: 180px;
     text-align: left;
     padding-right: 0.8em;
     color: var(--tungsten-6);
@@ -289,7 +299,7 @@
     border-radius: 0 8px 8px 0;
     padding: 0.6em 1em;
     margin-top: 1em;
-    font-size: 0.65em;
+    font-size: var(--slide-takeaway);
     color: var(--tungsten-3);
   }
   .takeaway strong { color: var(--mica-5); }
@@ -319,8 +329,8 @@
     background: var(--tungsten-20);
   }
 
-  .number-list { counter-reset: item; list-style: none !important; padding-left: 0; text-align: left; }
-  .number-list li { counter-increment: item; position: relative; padding-left: 2.2em; margin-bottom: 0.3em; }
+  .number-list { counter-reset: item; list-style: none !important; padding-left: 0; text-align: left; font-size: var(--slide-list); }
+  .number-list li { counter-increment: item; position: relative; padding-left: 2.2em; margin-bottom: 0.35em; font-size: inherit; }
   .number-list li::before {
     content: counter(item);
     position: absolute;
@@ -338,7 +348,7 @@
     font-size: 0.7em;
     text-indent: 0;
   }
-  .number-list li .sub { display: block; font-size: 0.85em; color: var(--tungsten-7); padding-left: 0; margin-top: 0.1em; }
+  .number-list li .sub, .reveal ul li .sub { display: block; font-size: 0.80em; color: var(--tungsten-7); padding-left: 0; margin-top: 0.1em; }
 
   .controls { color: var(--mica-4) !important; }
   .progress span { background: var(--mica-4) !important; }
@@ -382,7 +392,7 @@
 
 <!-- Slide 3: Move fast and break things -->
 <section class="center-slide" data-background-color="#161413">
-  <h1 style="font-size:1.4em; margin-bottom:0;">
+  <h1 style="font-size:var(--slide-splash-title); margin-bottom:0;">
     <span class="fragment fade-in" data-fragment-index="1">Let your agents<br></span>
     <span>move fast and break things</span>
     <span class="fragment fade-in" data-fragment-index="2"><br>then fix it themselves</span>
@@ -391,27 +401,32 @@
 
 <!-- Slide 5: Title -->
 <section class="center-slide" data-background-color="#161413">
-  <h1 style="font-size:1.7em; margin-bottom:0;">Self-healing agents</h1>
+  <h1 style="font-size:var(--slide-splash-title); margin-bottom:0;">Self-healing agents</h1>
   <div class="accent-line"></div>
-  <p style="font-size:0.85em; color:var(--mica-4); margin:0.3em 0 0.8em;">How Droid closes its own feedback loop</p>
-  <p style="font-size:0.55em; color:var(--tungsten-7);">David Gu, Member of Technical Staff</p>
+  <p style="font-size:var(--slide-splash-body); color:var(--mica-4); margin:0.3em 0 0.8em;">How Droid closes its own feedback loop</p>
+  <p style="font-size:var(--slide-body); color:var(--tungsten-7);">David GU | Member of Technical Staff</p>
   <div style="display:flex; align-items:center; justify-content:center; margin:0.3em auto 1.2em; width:auto;">
-    <img src="images/factory-wordmark.png" alt="Factory" style="height:56px;">
+    <img src="images/factory-wordmark.png" alt="Factory" style="height:80px;">
   </div>
-  <p style="font-size:0.5em; color:var(--tungsten-11); margin-top:0.6em;">𝕏&nbsp; <a href="https://x.com/agent_wrap" style="color:var(--tungsten-7); text-decoration:none;">@agent_wrap</a></p>
+  <p style="font-size:var(--slide-body); color:var(--tungsten-11); margin-top:0.6em;">𝕏&nbsp; <a href="https://x.com/agent_wrap" style="color:var(--tungsten-7); text-decoration:none;">@agent_wrap</a></p>
 </section>
 
 <!-- Slide: Droid intro -->
 <section>
   <h2>At Factory, we make Droid</h2>
-  <p>A multi-model coding agent that lives on your terminal, <span class="fragment">in your IDE,</span> <span class="fragment">in your Slack,</span> <span class="fragment">in your remote machines.</span></p>
-  <img class="fragment" src="images/droid-tui.png" alt="Droid TUI" style="width:100%; max-width:800px; margin:0.5em auto; border-radius:8px; border:1px solid var(--tungsten-16);">
+  <p style="font-size:var(--slide-splash-body);">A multi-model coding agent <span class="fragment">that lives on your terminal,</span> <span class="fragment">in your IDE,</span> <span class="fragment">in your Slack,</span> <span class="fragment">in your remote machines.</span></p>
+</section>
+
+<!-- Slide: Droid screenshot -->
+<section>
+  <h2>At Factory, we make Droid</h2>
+  <img src="images/droid-tui.png" alt="Droid TUI" style="width:100%; max-width:900px; margin:0.5em auto; border-radius:8px; border:1px solid var(--tungsten-16);">
 </section>
 
 <!-- Slide: We have bugs -->
 <section class="center-slide" data-background-color="#161413">
-  <p style="font-size:0.85em; color:var(--tungsten-2);">And as every piece of software out there...</p>
-  <p class="fragment" style="font-size:1.4em; font-weight:800; color:var(--tungsten-1); margin-top:0.4em;">we have bugs</p>
+  <p style="font-size:var(--slide-splash-body); color:var(--tungsten-2);">And as every piece of software out there...</p>
+  <p class="fragment" style="font-size:var(--slide-splash-title); font-weight:800; color:var(--tungsten-1); margin-top:0.4em;">we have bugs</p>
 </section>
 
 <!-- Slide 3: Bug fix runbook -->
@@ -443,7 +458,7 @@
 </section>
 
 <section class="center-slide">
-  <h2>Quick primer on Skills</h2>
+  <h2 style="font-size:var(--slide-center-heading);">Quick primer on Skills</h2>
 </section>
 
 <!-- Slide 5: Skills -->
@@ -452,11 +467,16 @@
   <ul>
     <li class="fragment">A <code>SKILL.md</code> markdown file with frontmatter metadata (name, description, etc)</li>
     <li class="fragment">Plus scripts that the skill may invoke</li>
-    <li class="fragment">Composable: <code>/bug-report</code> <span class="fragment">→ <code>/axiom-query</code></span> <span class="fragment">→ <code>/droid-control</code></span> <span class="fragment">→ ...</span></li>
+    <li class="fragment">Composable<span class="sub"><code>/bug-report</code> <span class="fragment">→ <code>/axiom-query</code></span> <span class="fragment">→ <code>/droid-control</code></span> <span class="fragment">→ ...</span></span></li>
     <li class="fragment">Progressive disclosure (lazy injection of context)</li>
     <li class="fragment">Not just a prompt template. It's a <strong>runbook</strong> the agent follows.</li>
   </ul>
-  <pre class="fragment" style="font-size:1.1em;"><code class="yaml" data-trim>
+</section>
+
+<!-- Slide 5b: Skills example -->
+<section>
+  <h2>Skills = procedural memory for agents</h2>
+  <pre><code class="yaml" data-trim>
 ---
 name: bug-report
 description: Analyze CLI bug reports from S3.
@@ -476,42 +496,14 @@ description: Analyze CLI bug reports from S3.
 <!-- Slide 6: The self-healing toolkit -->
 <section>
   <h2>The self-healing toolkit</h2>
-  <div style="margin-top:0.4em; text-align:left;">
-    <div class="arch-row fragment">
-      <span class="arch-source">Bug Reports (S3)</span>
-      <span class="arch-arrow">→</span>
-      <code>/bug-report</code>
-      <span class="arch-arrow">→</span>
-      <span class="arch-output">bug report id</span>
-    </div>
-    <div class="arch-row fragment">
-      <span class="arch-source">Queryable Logs</span>
-      <span class="arch-arrow">→</span>
-      <code>/axiom-query</code>
-      <span class="arch-arrow">→</span>
-      <span class="arch-output">axiom cli/mcp</span>
-    </div>
-    <div class="arch-row fragment">
-      <span class="arch-source">Sandboxed TUI</span>
-      <span class="arch-arrow">→</span>
-      <code>/droid-control</code>
-      <span class="arch-arrow">→</span>
-      <span class="arch-output">tuistory</span>
-    </div>
-    <div class="arch-row fragment">
-      <span class="arch-source">E2E Tests</span>
-      <span class="arch-arrow">→</span>
-      <code>/cli-e2e-testing</code>
-    </div>
-    <div class="arch-row fragment">
-      <span class="arch-source">PR Pipeline</span>
-      <span class="arch-arrow">→</span>
-      <code>/create-pr</code>
-      <span class="arch-arrow">+</span>
-      <code>/follow-up-on-pr</code>
-    </div>
-  </div>
-  <p class="fragment" style="margin-top:0.7em; font-size:0.6em; color:var(--tungsten-11);">
+  <ul>
+    <li class="fragment"><code>/bug-report &lt;bug-id&gt;</code><span class="sub">Download bug report from S3</span></li>
+    <li class="fragment"><code>/axiom-query</code><span class="sub">Queryable Logs → axiom cli/mcp</span></li>
+    <li class="fragment"><code>/droid-control</code><span class="sub">Sandboxed TUI → tuistory</span></li>
+    <li class="fragment"><code>/cli-e2e-testing</code><span class="sub">E2E Tests</span></li>
+    <li class="fragment"><code>/create-pr</code> + <code>/follow-up-on-pr</code><span class="sub">PR Pipeline</span></li>
+  </ul>
+  <p class="fragment" style="margin-top:0.7em; color:var(--tungsten-5);">
     ~40 skills in our repo
   </p>
 </section>
@@ -522,7 +514,7 @@ description: Analyze CLI bug reports from S3.
   <ul>
     <li class="fragment">Make it <strong style="color:var(--mica-5);">really easy</strong> for users to report issues directly from the product</li>
   </ul>
-  <p class="fragment" style="margin:0.4em 0; padding-left:2em;"><code>/bug should be able to fuzzy search models in the /models menu</code></p>
+  <p class="fragment" style="margin:0.4em 0; padding-left:2em;"><code>/bug &lt;description of the bug&gt;</code></p>
   <ul>
     <li class="fragment">Upload bug bundle with relevant metrics
       <ul>
@@ -569,7 +561,12 @@ description: Analyze CLI bug reports from S3.
     <li class="fragment"><strong style="color:var(--mica-5);">tuistory</strong>: a Playwright-like framework for terminal UIs. Launch, type, press keys, wait, snapshot.</li>
     <li class="fragment">Droid launches an instance of itself in a sandboxed session, triggers the bug, captures evidence</li>
   </ul>
-  <pre class="fragment" style="font-size:1.1em;"><code class="bash" data-trim>
+</section>
+
+<!-- Slide 9a: Step 3 - Reproduction code -->
+<section>
+  <h2>Step 3: reproduction</h2>
+  <pre><code class="bash" data-trim>
 tuistory launch "droid" -s repro --cols 120 --rows 40
 tuistory -s repro wait ">"
 tuistory -s repro type "/model"
@@ -589,6 +586,12 @@ tuistory -s repro snapshot</code></pre>
   <video class="demo-video" data-video-slot="tuistory" controls src="videos/tuistory.mp4"></video>
 </section>
 
+<!-- Slide 9c: Step 3 - Reproduction (demo 2) -->
+<section>
+  <h2>Step 3: reproduction</h2>
+  <video class="demo-video" data-video-slot="tuistory-2" controls src="videos/tuistory-2.mp4"></video>
+</section>
+
 <!-- Slide 10: Step 4 - E2E regression test -->
 <section>
   <h2>Step 4: e2e regression test</h2>
@@ -598,7 +601,12 @@ tuistory -s repro snapshot</code></pre>
     <li class="fragment">Each test gets an <strong>isolated workspace</strong> (project dir + simulated user home).</li>
     <li class="fragment">TUI traces are automatically recorded; Droid can inspect terminal state at any point in time.</li>
   </ul>
-  <pre class="fragment"><code class="typescript" data-trim>
+</section>
+
+<!-- Slide 10a: Step 4 - E2E regression test code -->
+<section>
+  <h2>Step 4: e2e regression test</h2>
+  <pre><code class="typescript" data-trim>
 test('fuzzy matches "opus4.6" to "Opus 4.6"', async ({ terminal }) => {
   await expect(
     terminal.getByText('>', { full: false, strict: false })
@@ -645,11 +653,15 @@ test('fuzzy matches "opus4.6" to "Opus 4.6"', async ({ terminal }) => {
   <img src="images/screenshot-bug-to-pr.png" alt="Bug to PR result" style="width:100%; max-width:900px; margin:0 auto; border-radius:8px; border:1px solid var(--tungsten-16);">
 </section>
 
+<section>
+  <img src="images/qa-screenshots.png" alt="QA Screenshots" style="width:100%; max-width:900px; margin:0 auto; border-radius:8px; border:1px solid var(--tungsten-16);">
+</section>
+
 <!-- Slide 12: Extra notes -->
 <section>
   <h2>Extra notes</h2>
   <ol class="number-list">
-    <li class="fragment"><strong>Skills are often not picked up automatically</strong><span class="sub">Be explicit if you can (for now)</span><span class="sub"><span class="fragment">Skills are now invokable!</span></span></li>
+    <li class="fragment"><strong>Skills are often not picked up automatically</strong><span class="sub">Be explicit if you can (for now)</span><span class="sub"><span class="fragment">Skills are invokable by the agent, or by the user (via <code>/</code> prefix)</span></span></li>
     <li class="fragment"><strong>MCPs work too</strong><span class="sub"><span class="fragment">They're not dead</span></span><span class="sub"><span class="fragment">Just be careful of context bloating</span></span></li>
     <li class="fragment"><strong>Start building skills locally</strong><span class="sub">Then share them with your team via a plugin marketplace or by committing them to a specific repo</span><span class="sub"><span class="fragment">Also check out <a href="https://skills.sh" style="color:var(--mica-5);">skills.sh</a> (+90k skills)</span></span></li>
   </ol>
@@ -658,7 +670,7 @@ test('fuzzy matches "opus4.6" to "Opus 4.6"', async ({ terminal }) => {
 <!-- Slide: Beyond bug fixes -->
 <section>
   <h2>Beyond bug fixes: other specialized skills</h2>
-  <p style="font-size:0.7em; color:var(--tungsten-5); margin-bottom:0.5em;">The same pattern applies to other engineering workflows:</p>
+  <p style="color:var(--tungsten-5); margin-bottom:0.5em;">The same pattern applies to other engineering workflows:</p>
   <ul>
     <li class="fragment"><code>/memory-leak-analysis</code>: <span class="sub">Collects V8 heap snapshots over time, classifies objects by growth pattern (only grows = leak, oscillates = healthy GC)</span></li>
     <li class="fragment"><code>/oncall-alert-triage</code>: <span class="sub">Groups and deduplicates alerts, runs the same investigation queries an oncall engineer would, classifies severity, detects false positives</span></li>
@@ -670,7 +682,6 @@ test('fuzzy matches "opus4.6" to "Opus 4.6"', async ({ terminal }) => {
 <section>
   <h2>How you can do this</h2>
   <ol class="number-list">
-    <li class="fragment"><strong>Write your runbooks as machine-readable skills.</strong><span class="sub">Start with your oncall playbook. If a human follows steps, an agent can too.</span></li>
     <li class="fragment"><strong>Give the agent read-only query access to your observability stack.</strong><span class="sub">Axiom, Datadog, Grafana. Show some example queries too.</span></li>
     <li class="fragment"><strong>Build a sandboxed reproduction environment.</strong><span class="sub">Docker, tuistory, Playwright. The agent needs to run your product and observe it fail.</span></li>
     <li class="fragment"><strong>Make regression tests the success criterion.</strong><span class="sub"><span class="fragment"><strong style="color:var(--ruby-3);">Red</strong> first,</span> <span class="fragment"><strong style="color:var(--jade-3);">Green</strong> next.</span></span><span class="sub"><span class="fragment">Not "does the code look right" but "does the test that previously failed now pass."</span></span><span class="sub"><span class="fragment">So many cases of agents adding <code>expect(true).toBe(true)</code> (or similar)</span></span></li>
@@ -681,35 +692,34 @@ test('fuzzy matches "opus4.6" to "Opus 4.6"', async ({ terminal }) => {
 <!-- Slide: Safety first -->
 <section>
   <h2>Safety first</h2>
-  <p class="fragment" style="font-size:0.8em; color:var(--tungsten-2); margin-bottom:0.6em;">Be careful of how you inject external dynamic content</p>
+  <p class="fragment" style="color:var(--tungsten-2); margin-bottom:0.6em;">Be careful of how you inject external dynamic content</p>
   <ul>
-    <li class="fragment"><strong style="color:var(--ruby-3);">Clinejection (2026):</strong> a malicious GitHub issue title prompt-injected an AI triage bot, compromising ~4,000 developer machines</li>
-    <li class="fragment"><strong>Sanitize external inputs.</strong> Issue titles, PR descriptions, user comments. All untrusted content that agents ingest</li>
-    <li class="fragment"><strong>Principle of least privilege.</strong> Read-only where possible, limit scope</li>
-    <li class="fragment"><strong>Sandboxed environments with fine-grained controls.</strong> Restricted network access and filesystem</li>
+    <li class="fragment"><strong style="color:var(--ruby-3);">Clinejection (2026)</strong><span class="sub">A malicious GitHub issue title prompt-injected an AI triage bot, compromising ~4,000 developer machines</span></li>
+    <li class="fragment"><strong>Sanitize external inputs</strong><span class="sub">Issue titles, PR descriptions, user comments. All untrusted content that agents ingest</span></li>
+    <li class="fragment"><strong>Principle of least privilege</strong><span class="sub">Read-only where possible, limit scope</span></li>
+    <li class="fragment"><strong>Sandboxed environments with fine-grained controls</strong><span class="sub">Restricted network access and filesystem</span></li>
   </ul>
 </section>
 
 <!-- Slide: What's next -->
 <section class="center-slide" data-background-color="#161413">
-  <h1 style="font-size:1.6em; margin-bottom:0.4em;">What's next?</h1>
-  <p style="font-size:0.85em; color:var(--tungsten-2); line-height:1.8;">
+  <h1 style="font-size:var(--slide-splash-title); margin-bottom:0.4em;">What's next?</h1>
+  <p style="font-size:var(--slide-splash-body); color:var(--tungsten-2); line-height:1.8;">
     <span class="fragment">Automating the process.</span><br>
-    <span class="fragment">High fidelity simulations.</span><br>
     <span class="fragment">Becoming a <strong style="color:var(--mica-5);">Dark Factory</strong></span>
   </p>
 </section>
 
 <!-- Slide 14: Q&A -->
 <section class="center-slide" data-background-color="#161413">
-  <h1 style="font-size:1.8em;">Q&A</h1>
+  <h1 style="font-size:var(--slide-splash-title);">Q&A</h1>
   <div class="accent-line"></div>
-  <p style="font-size:0.95em; color:var(--tungsten-7); margin-top:0.8em;">David Gu, Member of Technical Staff</p>
+  <p style="font-size:var(--slide-splash-body); color:var(--tungsten-7); margin-top:0.8em;">David GU | Member of Technical Staff</p>
   <div style="display:flex; align-items:center; justify-content:center; margin:0.3em auto 1.2em; width:auto;">
-    <img src="images/factory-wordmark.png" alt="Factory" style="height:72px;">
+    <img src="images/factory-wordmark.png" alt="Factory" style="height:96px;">
   </div>
-  <p style="font-size:0.85em; color:var(--tungsten-11); margin-top:0.6em;">𝕏&nbsp; <a href="https://x.com/agent_wrap" style="color:var(--tungsten-7); text-decoration:none;">@agent_wrap</a></p>
-  <p style="font-size:0.75em; color:var(--mica-5); margin-top:1.2em;">We are hiring.<br><a href="https://factory.ai/careers" style="color:var(--mica-6); text-decoration:none;">factory.ai/careers</a></p>
+  <p style="font-size:var(--slide-body); color:var(--tungsten-11); margin-top:0.6em;">𝕏&nbsp; <a href="https://x.com/agent_wrap" style="color:var(--tungsten-7); text-decoration:none;">@agent_wrap</a></p>
+  <p style="font-size:var(--slide-body); color:var(--mica-5); margin-top:1.2em;">We are hiring.<br><a href="https://factory.ai/careers" style="color:var(--mica-6); text-decoration:none;">factory.ai/careers</a></p>
 </section>
 
 </div>

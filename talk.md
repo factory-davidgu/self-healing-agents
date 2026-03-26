@@ -23,7 +23,7 @@ then fix it themselves
 
 How Droid closes its own feedback loop
 
-David Gu - Member of Technical Staff @ Factory
+David GU | Member of Technical Staff @ Factory
 
 ---
 
@@ -100,7 +100,7 @@ PR Pipeline      -> `/create-pr` + `/follow-up-on-pr`
 
 - Make it **really easy** for users to report issues directly from the product
 
-`/bug should be able to fuzzy search models in the /models menu`
+`/bug <description of the bug>`
 
 - Upload bug bundle with relevant metrics
   - droid version
@@ -218,7 +218,7 @@ test('fuzzy matches "opus4.6" to "Opus 4.6"', async ({ terminal }) => {
 
 ### Extra notes
 
-1. **Skills are often not picked up automatically.** Be explicit if you can (for now). Skills are now invokable!
+1. **Skills are often not picked up automatically.** Be explicit if you can (for now). Skills are invokable by the agent, or by the user (via `/` prefix)
 2. **MCPs work too.** They're not dead. Just be careful of context bloating
 3. **Start building skills locally** Then share them with your team via a plugin marketplace or by committing them to a specific repo. Also check out [skills.sh](https://skills.sh) (+90k skills)
 
@@ -236,7 +236,6 @@ The same pattern applies to other engineering workflows:
 
 ### How you can do this
 
-1. **Write your runbooks as machine-readable skills.** Start with your oncall playbook. If a human follows steps, an agent can too.
 2. **Give the agent read-only query access to your observability stack.** Axiom, Datadog, Grafana. Show some example queries too.
 3. **Build a sandboxed reproduction environment.** Docker, tuistory, Playwright. The agent needs to run your product and observe it fail.
 4. **Make regression tests the success criterion.** Red first, Green next. Not "does the code look right" but "does the test that previously failed now pass." So many cases of agents adding `expect(true).toBe(true)` (or similar)
@@ -258,7 +257,6 @@ Be careful of how you inject external dynamic content
 ### What's next?
 
 Automating the process.
-High fidelity simulations.
 Becoming a **Dark Factory**
 
 ---
@@ -267,6 +265,6 @@ Becoming a **Dark Factory**
 
 We are hiring. factory.ai/careers
 
-David Gu - Member of Technical Staff @ Factory
+David GU | Member of Technical Staff @ Factory
 
 @agent_wrap
