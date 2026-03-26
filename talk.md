@@ -6,7 +6,7 @@ Background image: opening-bg.jpg
 
 ### At Factory, we make Droid
 
-A coding agent that lives inside your terminal.
+A multi-model coding agent that lives on your terminal, in your IDE, in your Slack, in your remote machines.
 
 ---
 
